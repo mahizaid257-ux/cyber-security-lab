@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مختبر الأمن السيبراني</title>
+<style>
+
+body {
+  background: #050b18;
+  color: #e5f3ff;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 25px;
+  overflow-x: hidden;
+}
+
+.card {
+  background: rgba(15, 29, 52, 0.94);
+  border: 1px solid #0879a8;
+  box-shadow: 0 0 15px rgba(0, 180, 255, 0.18);
+  padding: 25px;
+  border-radius: 15px;
+  max-width: 500px;
+  margin: 30px auto;
+}
+
+h1, h2 {
+  color: #38bdf8;
+  text-shadow: 0 0 12px #0284c7;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin: 12px 0;
+  border: 1px solid #38bdf8;
+  border-radius: 9px;
+  background: #075985;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+button:hover {
+  background: #0369a1;
+}
+
+input {
+  background: #0f172a;
+  color: white;
+  border: 1px solid #38bdf8;
+}
+
+#feedback {
+  line-height: 1.8;
+}
+
+</style>
+</head>
+<body>
+
+  </div>
+</header>
+
+<h1>🛡️ مختبر الأمن السيبراني</h1>
+<p>اختبر معلوماتك وتعلّم كيف تحمي نفسك على الإنترنت</p>
+
+<div class="card">
+  <h2 id="number">السؤال 1 من 5</h2>
+  <h3 id="question"></h3>
+  <div id="answers"></div>
+  <p id="feedback"></p>
+  <button id="next" onclick="nextQuestion()" hidden>السؤال التالي</button>
+  <h3 id="score"></h3>
+</div>
+
+
+<section class="card">
+  <h2>🔎 فاحص الروابط</h2>
+  <p>أدخل الرابط لتحليل بعض علامات الاشتباه فيه</p>
+
+  <p style="color:#fbbf24;font-size:14px;line-height:1.8;">
+    ⚠️ تنبيه: هذه مؤشرات اشتباه فقط، وليست حكماً نهائياً بأن الموقع آمن أو خطير.
+  </p>
+
+  <input id="urlInput" type="text"
+    placeholder="https://example.com"
+    style="width:90%;padding:12px;border-radius:8px">
+
+  <button onclick="checkURL()">افحص الرابط</button>
+  <p id="urlResult"></p>
+</section>
+<script>
+const questions = [
+ {
+  level:"🟢 المستوى السهل",
+  q:"ما أفضل تصرف عند وصول رابط مجهول؟",
+  a:["أفتحه فوراً","أتحقق من مصدره","أرسله لأصدقائي"],
+  correct:1,
+  why:"تحقق من مصدر الرابط قبل فتحه."
+ },
+ {
+  level:"🟢 المستوى السهل",
+  q:"ما كلمة المرور الأقوى؟",
+  a:["123456","password","عبارة طويلة وفريدة"],
+  correct:2,
+  why:"استخدم كلمة مرور طويلة وفريدة."
+ },
+ {
+  level:"🟢 المستوى السهل",
+  q:"هل يجب مشاركة رمز التحقق مع الآخرين؟",
+  a:["نعم","لا","فقط مع الغرباء"],
+  correct:1,
+  why:"رمز التحقق سري ولا تشاركه."
+ },
+ {
+  level:"🟡 المستوى المتوسط",
+  q:"ما الهدف من التحقق بخطوتين؟",
+  a:["حماية إضافية للحساب","تسريع الإنترنت","تغيير عنوان IP"],
+  correct:0,
+  why:"يضيف طبقة حماية أخرى."
+ },
+ {
+  level:"🟡 المستوى المتوسط",
+  q:"ماذا يعني HTTPS في بداية الرابط؟",
+  a:["ضمان أن الموقع موثوق","اتصال مشفر بين المتصفح والموقع","أن الموقع مجاني"],
+  correct:1,
+  why:"HTTPS يشفر الاتصال، لكنه لا يضمن أن الموقع صادق."
+ },
+ {
+  level:"🟡 المستوى المتوسط",
+  q:"ما هو التصيد الإلكتروني؟",
+  a:["محاولة خداعك لسرقة معلوماتك","تحديث النظام","نسخ الملفات احتياطياً"],
+  correct:0,
+  why:"التصيد يحاول خداع المستخدم للحصول على بياناته."
+ },
+ {
+  level:"🟡 المستوى المتوسط",
+  q:"لماذا يجب تحديث البرامج؟",
+  a:["لزيادة حجم الملفات","لإصلاح أخطاء وثغرات أمنية","لتغيير كلمة المرور"],
+  correct:1,
+  why:"التحديثات قد تسد ثغرات أمنية."
+ },
+ {
+  level:"🔴 مستوى المخضرمين",
+  q:"ما وظيفة DNS؟",
+  a:["تشفير الملفات","تحويل أسماء النطاقات إلى عناوين IP","حذف الفيروسات"],
+  correct:1,
+  why:"DNS يساعد في العثور على عنوان الخادم المرتبط باسم النطاق."
+ },
+ {
+  level:"🔴 مستوى المخضرمين",
+  q:"ما المقصود بثغرة SQL Injection؟",
+  a:["خلل في تصميم الصور","إدخال أوامر SQL ضارة عبر مدخلات غير محمية","بطء اتصال الإنترنت"],
+  correct:1,
+  why:"تحدث عندما لا تُعالج مدخلات المستخدم بطريقة آمنة."
+ },
+ {
+  level:"🔴 مستوى المخضرمين",
+  q:"ما مبدأ أقل صلاحية (Least Privilege)؟",
+  a:["إعطاء الجميع صلاحيات المدير","منح كل مستخدم أقل صلاحيات يحتاجها","منع جميع المستخدمين"],
+  correct:1,
+  why:"تقليل الصلاحيات يقلل الأضرار المحتملة."
+ },
+ {
+  level:"🔴 مستوى المخضرمين",
+  q:"ما فائدة جدار الحماية (Firewall)؟",
+  a:["مراقبة وتصفية حركة الشبكة وفق قواعد","زيادة مساحة التخزين","تسريع المعالج"],
+  correct:0,
+  why:"يساعد في التحكم بحركة الاتصالات الواردة والصادرة."
+ },
+ {
+  level:"🔴 مستوى المخضرمين",
+  q:"ما فائدة اختبار الاختراق المصرح به؟",
+  a:["الدخول إلى أي شبكة","اكتشاف نقاط الضعف ضمن نطاق مصرح به","سرقة كلمات المرور"],
+  correct:1,
+  why:"يُستخدم لتحسين الحماية بإذن صاحب النظام."
+ }
+];
+
+
+let current = 0;
+let points = 0;
+let answered = false;
+
+
+function showQuestion() {
+ const q = questions[current];
+
+ document.getElementById("number").textContent =
+   q.level + " — السؤال " + (current + 1) + " من " + questions.length;
+
+ document.getElementById("question").textContent = q.q;
+ document.getElementById("feedback").textContent = "";
+ document.getElementById("next").hidden = true;
+ document.getElementById("score").textContent = "";
+ answered = false;
+
+ const box = document.getElementById("answers");
+ box.innerHTML = "";
+
+ q.a.forEach((answer, i) => {
+   const btn = document.createElement("button");
+   btn.textContent = answer;
+   btn.onclick = () => checkAnswer(i);
+   box.appendChild(btn);
+ });
+}
+
+
+function checkAnswer(choice) {
+ if (answered) return;
+ answered = true;
+
+ const q = questions[current];
+ const buttons = document.querySelectorAll("#answers button");
+
+ buttons.forEach(btn => btn.disabled = true);
+
+ if (choice === q.correct) {
+   points++;
+   document.getElementById("feedback").textContent =
+     "✅ إجابة صحيحة! " + q.why;
+ } else {
+   document.getElementById("feedback").textContent =
+     "❌ إجابة غير صحيحة. " + q.why;
+ }
+
+ document.getElementById("next").hidden = false;
+}
+
+
+function nextQuestion() {
+ current++;
+
+ if (current < questions.length) {
+   showQuestion();
+ } else {
+   let message = "";
+
+   if (points <= 2) {
+     message = "😂 هل أنت غبي أم أنك تختبر حظك؟ حاول مرة أخرى!";
+   } else if (points <= 5) {
+     message = "🤣 يبدو أنك تحتاج إلى بعض التدريب!";
+   } else if (points <= 9) {
+     message = "😎 جيد! بدأت تصبح خبيراً!";
+   } else if (points <= 11) {
+     message = "🔥 مستوى ممتاز! أنت محترف تقريباً!";
+   } else {
+     message = "🏆 أسطورة الأمن السيبراني! 12/12!";
+   }
+
+   document.querySelector(".card").innerHTML =
+     "<h2>🎉 انتهى الاختبار!</h2>" +
+     "<h3>نتيجتك: " + points + " من 12</h3>" +
+     "<h3>" + message + "</h3>" +
+     "<button onclick='location.reload()'>إعادة الاختبار</button>";
+ }
+}
+
+
+
+function checkURL() {
+  const input = document.getElementById("urlInput").value.trim();
+  const result = document.getElementById("urlResult");
+
+  if (!input) {
+    result.textContent = "يرجى إدخال رابط أولاً.";
+    return;
+  }
+
+  let url;
+
+  try {
+    url = new URL(input);
+  } catch {
+    result.textContent = "⚠️ صيغة الرابط غير صحيحة.";
+    return;
+  }
+
+  if (!["http:", "https:"].includes(url.protocol)) {
+    result.textContent = "⚠️ نوع الرابط غير مدعوم.";
+    return;
+  }
+
+  const warnings = [];
+
+  if (url.protocol !== "https:") {
+    warnings.push("الرابط لا يستخدم HTTPS.");
+  }
+
+  if (url.username || url.password) {
+    warnings.push("يحتوي الرابط على معلومات دخول.");
+  }
+
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(url.hostname)) {
+    warnings.push("يستخدم عنوان IP بدلاً من اسم النطاق.");
+  }
+
+  if (/(login|verify|account|password|free|gift)/i.test(url.href)) {
+    warnings.push("يحتوي على كلمات تستحق التحقق.");
+  }
+
+  if (warnings.length === 0) {
+  result.textContent =
+    "🟡 لم نعثر على علامات الاشتباه التي يفحصها هذا الاختبار. هذا لا يثبت أن الرابط آمن.";
+} else {
+  result.textContent =
+    "⚠️ علامات تستحق الانتباه:\n" + warnings.join("\n");
+}
+}
+
+showQuestion();
+
+
+
+</script>
+</body>
+</html>
